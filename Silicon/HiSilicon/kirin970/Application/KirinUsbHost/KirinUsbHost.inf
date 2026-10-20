@@ -1,0 +1,32 @@
+## @file
+#  Boot menu entry: switch the Kirin970 DWC3 port from peripheral (OTG) mode
+#  into host mode (XhciDxe owns the block again).
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinUsbHost
+  FILE_GUID                      = d2b8e3c5-4c76-4f1b-8d93-6e8a2f7c5b01
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UefiMain
+
+[Sources]
+  KirinUsbHost.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/HiSilicon/kirin970/kirin970.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  DebugLib
+  BaseMemoryLib
+
+[Protocols]
+  gKirinUsbFunctionProtocolGuid

@@ -1,0 +1,56 @@
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001A
+  PACKAGE_NAME                   = KirinPkg
+  PACKAGE_GUID                   = a1b2c3d4-e5f6-7890-abcd-ef0123456789
+  PACKAGE_VERSION                = 1.0
+
+[Includes]
+  Include
+  GPLDrivers/Include
+
+[Guids]
+  gKirinTokenSpaceGuid             = { 0xa1b2c3d4, 0xe5f6, 0x7890, { 0xab, 0xcd, 0xef, 0x01, 0x23, 0x45, 0x67, 0x89 } }
+
+[PcdsFixedAtBuild.common]
+  # Memory allocation
+  gKirinTokenSpaceGuid.PcdUefiMemPoolBase|0|UINT64|0x00000a106
+  gKirinTokenSpaceGuid.PcdUefiMemPoolSize|0|UINT32|0x00000a107
+
+  # Read the Android device tree's /memory and /reserved-memory on top of the
+  # static platform memory table (RAM filler, no-map carve, over-map reserve).
+  # FALSE = legacy path: only the static table is used, the FDT is ignored.
+  gKirinTokenSpaceGuid.PcdFdtMemoryEnable|TRUE|BOOLEAN|0x00000a108
+
+  # Hardware watchdog (Kirin970 AP watchdog0, ARM SP805, 24 s default timeout).
+  # FALSE = never arm it; TRUE = KirinWdtDxe arms it and feeds it every
+  # PcdKirinWdtKickPeriod until ExitBootServices.
+  gKirinTokenSpaceGuid.PcdKirinWdtEnable|TRUE|BOOLEAN|0x00000a109
+  # Period between kicks, in 100 ns units (30000000 = 3 s, the kernel's
+  # WDG_FEED_MOMENT feed period: ((default-timeout >> 1) - 1) / 3 = 3 s).
+  gKirinTokenSpaceGuid.PcdKirinWdtKickPeriod|30000000|UINT64|0x00000a10a
+
+  # Simple FrameBuffer
+  gKirinTokenSpaceGuid.PcdMipiFrameBufferAddress|0x00400000|UINT32|0x0000a400
+  gKirinTokenSpaceGuid.PcdMipiFrameBufferWidth|1080|UINT32|0x0000a401
+  gKirinTokenSpaceGuid.PcdMipiFrameBufferHeight|2160|UINT32|0x0000a402
+  gKirinTokenSpaceGuid.PcdMipiFrameBufferPixelBpp|32|UINT32|0x0000a403
+  gKirinTokenSpaceGuid.PcdMipiFrameBufferVisibleWidth|1080|UINT32|0x0000a404
+  gKirinTokenSpaceGuid.PcdMipiFrameBufferVisibleHeight|2160|UINT32|0x0000a405
+  gKirinTokenSpaceGuid.PcdMipiFrameBufferDelay|1|UINT32|0x0000a406
+
+  # RTC information
+  gKirinTokenSpaceGuid.PcdBootShimInfo1|0xb0000000|UINT64|0x00000a601
+
+  # Debug UART settings (Kirin 970 UART0)
+  gKirinTokenSpaceGuid.PcdDebugUartPortBase|0xFDF02000|UINT64|0x00000a701
+
+  # UFS Host Controller
+  gKirinTokenSpaceGuid.PcdKirinUfsHcBase|0xFF3C0000|UINT64|0x00000a801
+
+  # DSS LDI base for CMD mode panel refresh (0 = disabled / VIDEO mode)
+  gKirinTokenSpaceGuid.PcdDssLdiBase|0|UINT64|0x00000a810
+
+  # GPIO Key
+  gKirinTokenSpaceGuid.PcdGpioBase|0xFFF1D000|UINT64|0x00000a901
+  gKirinTokenSpaceGuid.PcdVolumeUpGpio|7|UINT32|0x00000a902
+  gKirinTokenSpaceGuid.PcdVolumeDownGpio|6|UINT32|0x00000a903

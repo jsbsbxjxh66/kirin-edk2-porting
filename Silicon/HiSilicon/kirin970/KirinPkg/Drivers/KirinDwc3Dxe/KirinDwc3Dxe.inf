@@ -1,0 +1,27 @@
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinDwc3Dxe
+  FILE_GUID                      = 7b2d4a1c-8e5f-4d3a-b6c9-1f4e2d8a5c03
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = KirinDwc3EntryPoint
+
+[Sources]
+  KirinDwc3Dxe.c
+
+[Packages]
+  Silicon/HiSilicon/kirin970/KirinPkg/KirinPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  KirinHi6523Lib
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  DebugLib
+  IoLib
+  TimerLib
+  NonDiscoverableDeviceRegistrationLib
+
+[Depex]
+  TRUE

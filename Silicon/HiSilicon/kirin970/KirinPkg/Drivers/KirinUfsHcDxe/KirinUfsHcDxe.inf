@@ -1,0 +1,38 @@
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinUfsHcDxe
+  FILE_GUID                      = a3f1640b-537c-4f0e-b49d-8e3c7a5d9e12
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = KirinUfsHcEntryPoint
+
+[Sources]
+  KirinUfsHcDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/HiSilicon/kirin970/KirinPkg/KirinPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  DxeServicesTableLib
+  DebugLib
+  BaseLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  IoLib
+  TimerLib
+  CacheMaintenanceLib
+
+[Protocols]
+  gEdkiiUfsHostControllerProtocolGuid
+  gEdkiiUfsHcPlatformProtocolGuid
+  gEfiDevicePathProtocolGuid
+
+[Pcd]
+  gKirinTokenSpaceGuid.PcdKirinUfsHcBase
+
+[Depex]
+  TRUE

@@ -1,0 +1,40 @@
+## @file
+#  Android Fastboot platform protocol for the Kirin970 UFS GPT.
+#
+#  Provides gAndroidFastbootPlatformProtocolGuid on top of the partitions
+#  exported by PartitionDxe, so `fastboot flash <name>` can address every
+#  partition of the UFS GPT (esp, boot, recovery, super, userdata, ...).
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = KirinFastbootPlatformDxe
+  FILE_GUID                      = 6e2c9b7d-4a81-4f3e-9d65-1c807b5a2f64
+  MODULE_TYPE                    = UEFI_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = KirinFastbootPlatformEntryPoint
+
+[Sources]
+  KirinFastbootPlatformDxe.c
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  MemoryAllocationLib
+  PrintLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+
+[Protocols]
+  gAndroidFastbootPlatformProtocolGuid
+  gAndroidFastbootTransportProtocolGuid
+  gEfiPartitionInfoProtocolGuid
+  gEfiBlockIoProtocolGuid
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec

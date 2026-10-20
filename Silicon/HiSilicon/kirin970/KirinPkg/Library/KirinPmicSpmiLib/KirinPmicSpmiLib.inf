@@ -1,0 +1,18 @@
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinPmicSpmiLib
+  FILE_GUID                      = 5a7c2e91-4b3d-4f18-8a62-9e1c0d7b3f54
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = KirinPmicSpmiLib
+
+[Sources]
+  KirinPmicSpmiLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/HiSilicon/kirin970/KirinPkg/KirinPkg.dec
+
+[LibraryClasses]
+  IoLib
+  TimerLib

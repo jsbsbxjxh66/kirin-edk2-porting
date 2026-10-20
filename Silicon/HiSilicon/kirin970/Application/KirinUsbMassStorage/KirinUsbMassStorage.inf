@@ -1,0 +1,37 @@
+## @file
+#  USB mass-storage (BOT) boot menu entry: share the Kirin970 UFS LUN0
+#  whole-disk BlockIo with the attached host.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinUsbMassStorage
+  FILE_GUID                      = c1a7f2d4-3b65-4e0a-9c82-5d7f1e6b4a90
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UefiMain
+
+[Sources]
+  KirinUsbMassStorage.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/HiSilicon/kirin970/kirin970.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  MemoryAllocationLib
+
+[Protocols]
+  gUsbDeviceProtocolGuid
+  gKirinUsbFunctionProtocolGuid
+  gEfiBlockIoProtocolGuid

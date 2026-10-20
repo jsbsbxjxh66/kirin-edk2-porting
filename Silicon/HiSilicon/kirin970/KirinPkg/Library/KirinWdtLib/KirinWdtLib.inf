@@ -1,0 +1,19 @@
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinWdtLib
+  FILE_GUID                      = 7d2b1c4a-5e6f-4a8b-9c0d-1e2f3a4b5c6d
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = KirinWdtLib
+
+[Sources]
+  KirinWdtLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/HiSilicon/kirin970/KirinPkg/KirinPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  IoLib

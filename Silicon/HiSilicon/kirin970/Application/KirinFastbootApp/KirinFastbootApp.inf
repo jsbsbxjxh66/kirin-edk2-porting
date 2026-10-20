@@ -1,0 +1,62 @@
+#/** @file
+#
+#  Kirin970 copy of EmbeddedPkg's AndroidFastbootApp.
+#
+#  Common/edk2/EmbeddedPkg is kept read-only, so the command engine lives
+#  here instead: the same 0.4 command set plus the verbs a modern host tool
+#  actually sends (flashing:*, set_active:*), with the reboot-bootloader
+#  spelling corrected.  FILE_GUID is deliberately unchanged from the
+#  upstream module - this INF replaces it 1:1, so the "fastboot" boot-menu
+#  entry (simpleinit.static.uefi.cfg efi_fv_guid) keeps pointing at the same
+#  FV file.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = KirinFastbootApp
+  FILE_GUID                      = 9588502a-5370-11e3-8631-d7c5951364c8
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = FastbootAppEntryPoint
+
+[Sources.common]
+  KirinFastbootApp.c
+  AndroidBootImg.c
+
+[Sources.ARM, Sources.AARCH64]
+  Arm/BootAndroidBootImg.c
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  DevicePathLib
+  DxeServicesTableLib
+  MemoryAllocationLib
+  PcdLib
+  PrintLib
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  UefiRuntimeServicesTableLib
+
+[Protocols]
+  gAndroidFastbootTransportProtocolGuid
+  gAndroidFastbootPlatformProtocolGuid
+  gKirinUsbFunctionProtocolGuid
+  gEfiLoadedImageProtocolGuid
+  gEfiSimpleTextOutProtocolGuid
+  gEfiSimpleTextInProtocolGuid
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/HiSilicon/kirin970/kirin970.dec
+
+[Packages.ARM, Packages.AARCH64]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec

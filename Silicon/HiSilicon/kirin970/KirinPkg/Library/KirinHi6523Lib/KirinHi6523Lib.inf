@@ -1,0 +1,27 @@
+## @file
+#  Hi6523 charger access over the DesignWare i2c6 master.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinHi6523Lib
+  FILE_GUID                      = 8d2f61b4-7c05-4a93-9e12-5b3c47a8de10
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = KirinHi6523Lib
+
+[Sources]
+  KirinHi6523Lib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/HiSilicon/kirin970/KirinPkg/KirinPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  IoLib
+  TimerLib

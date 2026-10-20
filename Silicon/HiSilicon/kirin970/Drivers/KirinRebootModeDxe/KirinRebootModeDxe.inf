@@ -1,0 +1,42 @@
+## @file
+# KirinRebootModeDxe: translate SimpleInit's Qualcomm-style reset
+# payload ("RESET_PARAM" + mode byte) into the PMIC HRST_REG13 reboot
+# reason and the misc BCB so "reboot to recovery / bootloader" actually
+# boots there.
+#
+# Copyright (c) 2026, Renegade Project. All rights reserved.
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = KirinRebootModeDxe
+  FILE_GUID                      = 8b430e04-ff8d-4897-8a88-e73155314c19
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = KirinRebootModeInitialize
+
+[Sources.common]
+  KirinRebootModeDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/HiSilicon/kirin970/KirinPkg/KirinPkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  BaseLib
+  DebugLib
+  IoLib
+  TimerLib
+  MemoryAllocationLib
+  KirinPmicSpmiLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+
+[Protocols]
+  gEfiBlockIoProtocolGuid
+  gEfiPartitionInfoProtocolGuid
+  gEfiResetNotificationProtocolGuid
+
+[Depex]
+  gEfiResetNotificationProtocolGuid

@@ -1,0 +1,40 @@
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinGpioKeyDxe
+  FILE_GUID                      = c3f92a18-2e4b-4d63-a1b5-7c8d2f6e3a01
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = KirinGpioKeyEntryPoint
+
+[Sources]
+  KirinGpioKeyDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/HiSilicon/kirin970/KirinPkg/KirinPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  DebugLib
+  IoLib
+  TimerLib
+  MemoryAllocationLib
+  BaseMemoryLib
+  KirinPmicSpmiLib
+
+[Protocols]
+  gEfiSimpleTextInProtocolGuid
+  gEfiSimpleTextInputExProtocolGuid
+
+[Guids]
+  gEfiConsoleInDeviceGuid
+
+[Pcd]
+  gKirinTokenSpaceGuid.PcdGpioBase
+  gKirinTokenSpaceGuid.PcdVolumeUpGpio
+  gKirinTokenSpaceGuid.PcdVolumeDownGpio
+
+[Depex]
+  TRUE

@@ -1,0 +1,19 @@
+[Defines]
+  DEC_SPECIFICATION = 0x0001001A
+  PACKAGE_NAME      = kirin970Pkg
+  PACKAGE_GUID      = { 0xd1e2f3a4, 0xb5c6, 0x7890, { 0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0 } }
+  PACKAGE_VERSION   = 1.0
+
+[Includes]
+  Include
+
+[Guids]
+  gKirin970PkgTokenSpaceGuid = { 0xd1e2f3a4, 0xb5c6, 0x7890, { 0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0 } }
+
+[Protocols]
+  ## Kirin970 DWC3 gadget mode control (Idle/Stop), produced by KirinUsbDeviceDxe.
+  gKirinUsbFunctionProtocolGuid = { 0x9b4e7c10, 0x5a23, 0x4d8f, { 0x91, 0x6c, 0x2e, 0x7a, 0x35, 0xd1, 0x4b, 0x60 } }
+
+[PcdsFixedAtBuild.common]
+  gKirin970PkgTokenSpaceGuid.PcdSmbiosProcessorModel|"HiSilicon Kirin 970 @ 2.36 GHz"|VOID*|0x0000a304
+  gKirin970PkgTokenSpaceGuid.PcdSmbiosProcessorRetailModel|"Kirin 970"|VOID*|0x0000a305

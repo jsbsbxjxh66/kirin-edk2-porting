@@ -1,0 +1,32 @@
+## @file
+#  Boot menu entry: put the Kirin970 DWC3 port back into its default
+#  peripheral (OTG) state after USB host mode was selected.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinUsbOtg
+  FILE_GUID                      = a5d0b7e2-9c31-4f68-b047-3e6d19c85a72
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UefiMain
+
+[Sources]
+  KirinUsbOtg.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/HiSilicon/kirin970/kirin970.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  DebugLib
+  BaseMemoryLib
+
+[Protocols]
+  gKirinUsbFunctionProtocolGuid

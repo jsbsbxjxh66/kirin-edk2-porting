@@ -1,0 +1,36 @@
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinWdtDxe
+  FILE_GUID                      = b4e8f1c2-9a37-4d65-8f21-6c0a7e5d3b94
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = KirinWdtEntryPoint
+
+[Sources]
+  KirinWdtDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/HiSilicon/kirin970/KirinPkg/KirinPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  DebugLib
+  IoLib
+  TimerLib
+  KirinWdtLib
+
+[Protocols]
+  gEfiTimerArchProtocolGuid
+
+[Guids]
+  gEfiEventExitBootServicesGuid
+
+[FixedPcd]
+  gKirinTokenSpaceGuid.PcdKirinWdtEnable
+  gKirinTokenSpaceGuid.PcdKirinWdtKickPeriod
+
+[Depex]
+  gEfiTimerArchProtocolGuid

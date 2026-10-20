@@ -1,0 +1,58 @@
+## @file
+#  DWC3 device (peripheral) mode driver for Kirin 970.
+#
+#  Produces gUsbDeviceProtocolGuid for the EmbeddedPkg Android fastboot
+#  USB transport.  Must be dispatched before AndroidFastbootTransportUsbDxe,
+#  whose entry point resolves that protocol and fails without it.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = KirinUsbDeviceDxe
+  FILE_GUID                      = 3f8a1c62-9b47-4d0e-8a15-7c2e5d90b3a4
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = KirinUsbDeviceEntryPoint
+
+[Sources]
+  KirinUsbDeviceDxe.c
+  KirinUsbDeviceInternal.h
+  KirinUsbDeviceState.c
+  KirinUsbDeviceRegs.c
+  KirinUsbDeviceEpCmd.c
+  KirinUsbDeviceTransfer.c
+  KirinUsbDeviceEp0.c
+  KirinUsbDeviceBulk.c
+  KirinUsbDeviceEvents.c
+  KirinUsbDeviceCore.c
+  KirinUsbDeviceHost.c
+
+[Packages]
+  Silicon/HiSilicon/kirin970/KirinPkg/KirinPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/HiSilicon/kirin970/kirin970.dec
+
+[LibraryClasses]
+  KirinHi6523Lib
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  BaseLib
+  BaseMemoryLib
+  CacheMaintenanceLib
+  DebugLib
+  IoLib
+  MemoryAllocationLib
+  TimerLib
+
+[Protocols]
+  gUsbDeviceProtocolGuid
+  gEfiUsb2HcProtocolGuid
+  gKirinUsbFunctionProtocolGuid
+
+[Depex]
+  TRUE
