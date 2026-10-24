@@ -64,12 +64,14 @@ const int  year_lengths[2] = {
 
 static int    gmt_is_set;
 void Efi2Tm(EFI_TIME  *ET,struct tm *BT){
+	volatile UINT8 *B = (volatile UINT8 *)ET;
+
 	BT->tm_year = ET->Year - TM_YEAR_BASE;
-	BT->tm_mon = ET->Month - 1;   // BD time is zero based, EFI is 1 based
-	BT->tm_mday = ET->Day;
-	BT->tm_hour = ET->Hour;
-	BT->tm_min = ET->Minute;
-	BT->tm_sec = ET->Second;
+	BT->tm_mon = B[2] - 1;   // BD time is zero based, EFI is 1 based
+	BT->tm_mday = B[3];
+	BT->tm_hour = B[4];
+	BT->tm_min = B[5];
+	BT->tm_sec = B[6];
 	BT->tm_isdst = -1;
 	BT->tm_zoneoff = ET->TimeZone;
 	BT->tm_daylight = ET->Daylight;
