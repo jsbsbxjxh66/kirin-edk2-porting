@@ -754,6 +754,70 @@ CheckHibern8 (
   return EFI_TIMEOUT;
 }
 
+// UFS UniPro PHY Adapter attributes used for the link power-mode change.
+// Kirin 970 + UFS 2.1 tops out at HS-G3 / Rate B; HS-G4/G5 are not supported.
+#define UPA_PA_ACTIVETXDATALANES  0x1560
+#define UPA_PA_TXGEAR             0x1568
+#define UPA_PA_TXTERMINATION      0x1569
+#define UPA_PA_HSSERIES           0x156A
+#define UPA_PA_PWRMODE            0x1571
+#define UPA_PA_ACTIVERXDATALANES  0x1580
+#define UPA_PA_RXGEAR             0x1583
+#define UPA_PA_RXTERMINATION      0x1584
+#define UPA_FAST_MODE             1
+#define UPA_HS_MODE_B             2
+#define UPA_HS_G3                 3
+
+// The EDK2 UFS HCI driver only performs DME_LINKSTARTUP; the Android
+// ufs-kirin driver then sends PA_PWRMODE to move from the reset PWM mode to
+// HS-G3/Rate B. Do the same after link startup.
+STATIC
+EFI_STATUS
+KirinUfsSetHighSpeed (
+  IN EDKII_UFS_HC_DRIVER_INTERFACE  *DriverIntf
+  )
+{
+  EFI_STATUS  Status;
+  UINT32      Value;
+  UINT32      Retry;
+
+  DEBUG ((DEBUG_INFO, "KirinUfsHc: requesting HS-G3 Rate B x2 lanes\n"));
+
+  Status = DmeSet (DriverIntf, UPA_PA_RXGEAR, 0, UPA_HS_G3);
+  if (EFI_ERROR (Status)) return Status;
+  Status = DmeSet (DriverIntf, UPA_PA_ACTIVERXDATALANES, 0, 2);
+  if (EFI_ERROR (Status)) return Status;
+  Status = DmeSet (DriverIntf, UPA_PA_RXTERMINATION, 0, 1);
+  if (EFI_ERROR (Status)) return Status;
+  Status = DmeSet (DriverIntf, UPA_PA_TXGEAR, 0, UPA_HS_G3);
+  if (EFI_ERROR (Status)) return Status;
+  Status = DmeSet (DriverIntf, UPA_PA_ACTIVETXDATALANES, 0, 2);
+  if (EFI_ERROR (Status)) return Status;
+  // ufs-kirin-unipro-termination is set in the Honor Play DTS.
+  Status = DmeSet (DriverIntf, UPA_PA_TXTERMINATION, 0, 1);
+  if (EFI_ERROR (Status)) return Status;
+  Status = DmeSet (DriverIntf, UPA_PA_HSSERIES, 0, UPA_HS_MODE_B);
+  if (EFI_ERROR (Status)) return Status;
+
+  // ufs-kirin-broken-fastauto: use FAST_MODE, not FASTAUTO_MODE.
+  Status = DmeSet (DriverIntf, UPA_PA_PWRMODE, 0,
+                   (UPA_FAST_MODE << 4) | UPA_FAST_MODE);
+  if (EFI_ERROR (Status)) return Status;
+
+  // PA_PWRMODE restarts the UniPro link. Give it time, then read PA_RXGEAR
+  // back as evidence that the new gear was accepted.
+  MicroSecondDelay (10000);
+  Value = 0;
+  for (Retry = 0; Retry < 100; Retry++) {
+    if (!EFI_ERROR (DmeGet (DriverIntf, UPA_PA_RXGEAR, 0, &Value)) && (Value == UPA_HS_G3)) {
+      break;
+    }
+    MicroSecondDelay (1000);
+  }
+  DEBUG ((DEBUG_INFO, "KirinUfsHc: HS link PA_RXGEAR readback %u\n", Value));
+  return (Value == UPA_HS_G3) ? EFI_SUCCESS : EFI_DEVICE_ERROR;
+}
+
 STATIC
 EFI_STATUS
 KirinUfsSetupSnpsAsicMphy (
@@ -919,6 +983,12 @@ KirinUfsHcPlatformCallback (
 
   case EdkiiUfsHcPostLinkStartup:
     DEBUG ((DEBUG_INFO, "KirinUfsHc: PostLinkStartup - configuring Unipro DL\n"));
+
+    // Move from the reset PWM mode to HS-G3/Rate B before UTP traffic.
+    Status = KirinUfsSetHighSpeed (DriverIntf);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_WARN, "KirinUfsHc: HS-G3 change failed: %r; continuing at current mode\n", Status));
+    }
 
     // Unipro Data Link thresholds (critical for UTP traffic)
     Status = DmeSet (DriverIntf, 0x2044, 0, 0x0);  // DL_AFC0CreditThreshold
