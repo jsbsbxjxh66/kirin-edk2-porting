@@ -44,6 +44,7 @@
   gArmTokenSpaceGuid.PcdSystemMemorySize
   gSimpleInitTokenSpaceGuid.PcdDeviceTreeStore
   gKirinTokenSpaceGuid.PcdFdtMemoryEnable
+  gKirinTokenSpaceGuid.PcdFdtReservedMemEnable
 
 [Depex]
   TRUE

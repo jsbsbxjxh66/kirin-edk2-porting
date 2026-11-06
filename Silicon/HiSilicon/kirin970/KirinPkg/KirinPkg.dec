@@ -16,10 +16,18 @@
   gKirinTokenSpaceGuid.PcdUefiMemPoolBase|0|UINT64|0x00000a106
   gKirinTokenSpaceGuid.PcdUefiMemPoolSize|0|UINT32|0x00000a107
 
-  # Read the Android device tree's /memory and /reserved-memory on top of the
-  # static platform memory table (RAM filler, no-map carve, over-map reserve).
-  # FALSE = legacy path: only the static table is used, the FDT is ignored.
+  # Read the Android device tree's /memory on top of the static platform
+  # memory table (RAM size detection / filler).  FALSE = legacy path: only the
+  # static table is used, the FDT is ignored.  The /reserved-memory carve is
+  # controlled separately by PcdFdtReservedMemEnable.
   gKirinTokenSpaceGuid.PcdFdtMemoryEnable|TRUE|BOOLEAN|0x00000a108
+
+  # Read the Android device tree's /reserved-memory (no-map) and the
+  # bootloader's over-map reservations, and carve them out of UEFI Conventional
+  # memory.  FALSE (default) = ignore the bootloader's reserved-memory
+  # metadata; the static platform table is used as-is.  Enable only when the
+  # static table is known to under-report the bootloader carve-outs.
+  gKirinTokenSpaceGuid.PcdFdtReservedMemEnable|FALSE|BOOLEAN|0x00000a10b
 
   # Hardware watchdog (Kirin970 AP watchdog0, ARM SP805, 24 s default timeout).
   # FALSE = never arm it; TRUE = KirinWdtDxe arms it and feeds it every

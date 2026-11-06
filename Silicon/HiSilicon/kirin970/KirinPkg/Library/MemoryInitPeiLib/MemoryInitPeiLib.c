@@ -566,13 +566,19 @@ MemoryPeim(IN EFI_PHYSICAL_ADDRESS UefiMemoryBase, IN UINT64 UefiMemorySize)
   // is still unallocated.
   //
   if (Fdt != NULL) {
-    UINTN Overmap = ReserveFdtMemoryOvermap(Fdt, ConvSpan, ConvCount);
-    UINTN Carved = CarveFdtNoMapReserved(Fdt, ConvSpan, ConvCount);
+    if (PcdGetBool(PcdFdtReservedMemEnable)) {
+      UINTN Overmap = ReserveFdtMemoryOvermap(Fdt, ConvSpan, ConvCount);
+      UINTN Carved = CarveFdtNoMapReserved(Fdt, ConvSpan, ConvCount);
 
-    DEBUG((
-        EFI_D_ERROR,
-        "KirinMem: %u FDT no-map carve(s), %u over-map reserve(s)\n",
-        (UINT32)Carved, (UINT32)Overmap));
+      DEBUG((
+          EFI_D_ERROR,
+          "KirinMem: %u FDT no-map carve(s), %u over-map reserve(s)\n",
+          (UINT32)Carved, (UINT32)Overmap));
+    } else {
+      DEBUG((
+          EFI_D_ERROR,
+          "KirinMem: FDT reserved-memory off, no carve / over-map reserve\n"));
+    }
   }
 
   // Last one (terminator)

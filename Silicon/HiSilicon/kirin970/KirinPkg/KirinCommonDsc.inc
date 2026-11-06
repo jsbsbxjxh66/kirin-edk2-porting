@@ -109,11 +109,18 @@
   gEmbeddedTokenSpaceGuid.PcdMemoryTypeEfiLoaderData|0
 
   #
-  # Memory map source.  TRUE  = static table + Android FDT (/memory filler,
-  # no-map carve, over-map reserve).  FALSE = static table only, i.e. the
-  # original path.  Flip to FALSE to drop every FDT derived change.
+  # Memory map source.  TRUE  = static table + Android FDT /memory (RAM size
+  # detection / filler).  FALSE = static table only, i.e. the original path.
+  # The /reserved-memory carve is controlled separately below.
   #
   gKirinTokenSpaceGuid.PcdFdtMemoryEnable|TRUE
+
+  #
+  # Android FDT /reserved-memory (no-map) + bootloader over-map reserve carve.
+  # FALSE (default) = do not read the bootloader's reserved-memory metadata.
+  # TRUE = carve those regions out of UEFI Conventional memory.
+  #
+  gKirinTokenSpaceGuid.PcdFdtReservedMemEnable|FALSE
 
   #
   # Hardware watchdog (Kirin970 AP watchdog0, ARM SP805, 24 s default
