@@ -14,6 +14,7 @@
 #include <Library/BaseMemoryLib.h>
 #include <Library/CacheMaintenanceLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/PcdLib.h>
 #include <Library/ArmLib.h>
 #include <Library/ArmMmuLib.h>
 #include <Library/BaseLib.h>
@@ -579,6 +580,26 @@ ArmConfigureMmu (
   } else if (ArmReadCurrentEL () == AARCH64_EL1) {
     // Due to Cortex-A57 erratum #822227 we must set TG1[1] == 1, regardless of EPD1.
     TCR = T0SZ | TCR_TG0_4KB | TCR_TG1_4KB | TCR_EPD1;
+
+    //
+    // Kirin 970 (Hi3670) is an ARMv8.0 part.  The stock value above leaves
+    // TTBR1 walks disabled (TCR_EPD1) with T1SZ = 0, and gives TTBR1
+    // non-cacheable / non-shareable walks over page tables that are written
+    // as cacheable memory.  The OS that runs next cannot repair this itself:
+    // this part drops a TCR_EL1 write outright when the value sets a bit it
+    // treats as RES0, and Linux programs the ARMv8.5+ TBID1/TCMA1 fields.
+    // Program the TTBR1 half here instead -- every field below is
+    // architectural on ARMv8.0, so the write sticks.  TTBR1 is unused by
+    // UEFI and is replaced by the OS.
+    // Controlled by gKirinTokenSpaceGuid.PcdKirin970ProgramTcrTtbr1.
+    //
+    if (FixedPcdGetBool (PcdKirin970ProgramTcrTtbr1)) {
+      TCR &= ~TCR_EPD1;                          // TTBR1 walks enabled
+      TCR |= (UINT64)(64 - 48) << TCR_EL1_T1SZ_FIELD;  // T1SZ = 16 (48-bit VA)
+      TCR |= TCR_RGN_INNER_WRITE_BACK_ALLOC << 16;     // IRGN1 = WB-WA
+      TCR |= TCR_RGN_OUTER_WRITE_BACK_ALLOC << 16;     // ORGN1 = WB-WA
+      TCR |= TCR_SH_INNER_SHAREABLE << 16;             // SH1 inner shareable
+    }
 
     // Set the Physical Address Size using MaxAddress
     if (MaxAddress < SIZE_4GB) {

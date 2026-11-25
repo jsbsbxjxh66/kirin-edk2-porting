@@ -37,6 +37,15 @@
   # WDG_FEED_MOMENT feed period: ((default-timeout >> 1) - 1) / 3 = 3 s).
   gKirinTokenSpaceGuid.PcdKirinWdtKickPeriod|30000000|UINT64|0x00000a10a
 
+  # Program the TTBR1 half of TCR_EL1 in ArmConfigureMmu() (ArmMmuLib).
+  # Kirin 970 is ARMv8.0: the stock EL1 value leaves EPD1 set (TTBR1 walks
+  # disabled), T1SZ = 0, and IRGN1/ORGN1/SH1 = 0 (non-cacheable /
+  # non-shareable TTBR1 walks against cacheable page tables).  The OS that
+  # runs next cannot repair this itself, because this part drops a TCR_EL1
+  # write outright when the value sets any bit it treats as RES0 (Linux
+  # programs the ARMv8.5+ TBID1/TCMA1 fields).  TRUE = program TTBR1 here.
+  gKirinTokenSpaceGuid.PcdKirin970ProgramTcrTtbr1|TRUE|BOOLEAN|0x00000a10c
+
   # Simple FrameBuffer
   gKirinTokenSpaceGuid.PcdMipiFrameBufferAddress|0x00400000|UINT32|0x0000a400
   gKirinTokenSpaceGuid.PcdMipiFrameBufferWidth|1080|UINT32|0x0000a401

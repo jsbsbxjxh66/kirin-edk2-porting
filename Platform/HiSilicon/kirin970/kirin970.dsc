@@ -32,6 +32,10 @@
 
   gKirinTokenSpaceGuid.PcdMipiFrameBufferAddress|0x10600000
 
+  # ArmMmuLib: program the TTBR1 half of TCR_EL1 (see KirinPkg.dec).
+  # Set FALSE to get the stock ArmPkg behaviour.
+  gKirinTokenSpaceGuid.PcdKirin970ProgramTcrTtbr1|TRUE
+
   gArmPlatformTokenSpaceGuid.PcdCoreCount|8
   gArmPlatformTokenSpaceGuid.PcdClusterCount|2
 

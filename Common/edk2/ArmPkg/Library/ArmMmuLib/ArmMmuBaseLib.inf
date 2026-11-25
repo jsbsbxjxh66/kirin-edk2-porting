@@ -33,11 +33,17 @@
   ArmPkg/ArmPkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
+  # Kirin970 platform PCDs consumed by the TTBR1 fixup in ArmMmuLibCore.c
+  Silicon/HiSilicon/kirin970/KirinPkg/KirinPkg.dec
 
 [LibraryClasses]
   ArmLib
   CacheMaintenanceLib
   MemoryAllocationLib
+  PcdLib
+
+[FixedPcd.AARCH64]
+  gKirinTokenSpaceGuid.PcdKirin970ProgramTcrTtbr1
 
 [Pcd.ARM]
   gArmTokenSpaceGuid.PcdNormalMemoryNonshareableOverride
